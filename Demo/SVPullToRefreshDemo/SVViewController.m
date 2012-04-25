@@ -20,14 +20,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // setup the pull-to-refresh view
+    __weak SVViewController *bself = self;
     [self.tableView addPullToRefreshWithActionHandler:^{
-        NSLog(@"refresh dataSource");
-        [tableView.pullToRefreshView performSelector:@selector(stopAnimating) withObject:nil afterDelay:2];
+        [bself loadData];
     }];
-    
+
     // trigger the refresh manually at the end of viewDidLoad
     [tableView.pullToRefreshView triggerRefresh];
+}
+
+- (void)loadData {
+    [self performSelector:@selector(doneLoading) withObject:nil afterDelay:5];
+}
+
+- (void)doneLoading {
+    [tableView.pullToRefreshView stopAnimating];
 }
 
 #pragma mark -
